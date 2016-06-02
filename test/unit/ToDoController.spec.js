@@ -11,8 +11,10 @@ describe('ToDoController', function(){
   beforeEach(inject(function($controller,ToDoFactory,$httpBackend,FilterService){
     ctrl = $controller('ToDoController');
    	fs = FilterService;
-    spyOn(fs,'ammendToDos').and.returnValue(["ToDo1 : completed"]);
     factory = ToDoFactory;
+
+    spyOn(fs,'ammendToDos').and.callThrough();
+
     httpbackend = $httpBackend;
 		data = [new ToDoFactory('ToDo1',true),new ToDoFactory('ToDo2',false)];
     httpbackend.expect('GET','http://quiet-beach-24792.herokuapp.com/todos.json').respond(data);
@@ -59,9 +61,12 @@ describe('ToDoController', function(){
 
   it('returns the total number of tasks for the current filter', function() {
     expect(ctrl.total).toEqual(2)
-    // ctrl.setFilterStatus('Active');
+    ctrl.setFilterStatus('Active');
     ctrl.filterToDos();
     expect(ctrl.total).toEqual(1);
+    ctrl.setFilterStatus('All');
+    ctrl.filterToDos();
+    expect(ctrl.total).toEqual(2);
   });
 
 });
