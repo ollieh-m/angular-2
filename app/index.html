@@ -13,16 +13,23 @@
   <body>
     <div id="todo" ng-controller="ToDoController as controller">
 
-      <input type='radio' name='filter' class='filterActive' ng-click="controller.setFilterStatus('Active')">View only active</input>
+      <select ng-model="showCompleted">
+        <option value="" selected>All</option>
+        <option value="true">Completed</option>
+        <option value="false">Active</option>
+      </select>
+
+      <!-- <input type='radio' name='filter' class='filterActive' ng-click="controller.setFilterStatus('Active')">View only active</input>
       <input type='radio' name='filter' class='filterComplete' ng-click="controller.setFilterStatus('Complete')">View only complete</input>
       <input type='radio' name='filter' class='filterAll' ng-click="controller.setFilterStatus('All')">View all</input>
-
-      <ul ng-repeat="todo in controller.filterToDos()">
+ -->
+      <ul ng-repeat="todo in controller.todos | filter:{completed:showCompleted}">
         <li>
           <p class='item'>{{ todo.text }} : {{ todo.completed ? 'completed' : 'not completed' }}</p>
           <button class="setCompleteButton" ng-click="todo.complete()">Complete</button>
         </li>
       </ul>
+      
       <p class= "total">Total: {{ controller.total }}</p>
       <input id='addToDoText' type='text' ng-model="toDoText" placeholder="New task...">
       <button id='addToDoButton' ng-click="controller.addToDo(toDoText)">Add task</button>
